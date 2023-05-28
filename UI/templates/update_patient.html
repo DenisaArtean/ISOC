@@ -1,0 +1,46 @@
+{% extends "Layout.html" %}
+{% block title %}Patients{% endblock %}
+{% block body %}
+  <form  action=" " method="POST">
+
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input type="text" class="form-control" name="lastname" id="lastName" value = "{{patient.last_name}}" placeholder="Last Name" required="">
+    </div>
+
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input type="text" class="form-control" name="firstname" id="firstName" value = "{{patient.first_name}}" placeholder="First Name" required="">
+    </div>
+
+    <div class="form-group">
+      <label for="sex">Sex</label>
+      <input type="text" class="form-control" name="sex" id="sex" value = "{{patient.sex}}" placeholder="Sex (M/F)" required="">
+    </div>
+
+    <div class="form-group">
+      <label for="dateOfBirth">Date of Birth (yyy/mm/dd)</label>
+      <input type="text" class="form-control" name="dateofbirth" id="dateOfBirth" value = "{{patient.date_of_birth}}" placeholder="Date of Birth (yyy/mm/dd)" required="">
+    </div>
+    <div class="form-group">
+      <label for="homeAddress">Home Address</label>
+      <input type="text" class="form-control" name="homeaddress" id="homeAddress" value = "{{patient.address}}" placeholder="Home Address" required="">
+   </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" name="email" id="email" value = "{{patient.email}}" placeholder="Email" required="">
+    </div>
+
+    <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="numbers" class="form-control" name="phonenumber" id="phoneNumber" value = "{{patient.phone_number}}" placeholder="Phone Number" required="">
+    </div>
+
+    <div class="">
+      <button type="submit" class="btn btn-success">Update</button>
+    </div>
+
+  </form>
+
+{%endblock%}

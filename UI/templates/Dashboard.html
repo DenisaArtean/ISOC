@@ -1,0 +1,135 @@
+{% extends "Layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+
+<a type="button" class="spaceUnder" href="http://127.0.0.1:5000/patients"> <i class="fa fa-arrow-left"></i> Back to Patients  </a>
+&nbsp;
+
+<div class="row">
+
+  <!-- Area Chart -->
+
+    <div class="col-xl-12 col-lg-7">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-color-1"> Overview</h6>
+          <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+              <div class="dropdown-header"></div>
+              <a class="dropdown-item" onclick="myGlucose()">Glucose Overview</a>
+              <a class="dropdown-item" onclick="myBMI()">BMI Overview</a>
+              <div class="dropdown-divider"></div> 
+            </div>
+          </div>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" id="chart1" >
+          <div class="chart-area" style="height:450px;">
+            <canvas id="myChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card-body" id="chart2" style="display:none;" >
+          <div class="chart-area" style="height:450px;">
+            <canvas id="myChart1" ></canvas>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const ctx1 = document.getElementById('myChart1').getContext('2d');
+
+    glucose = JSON.parse({{ glucose_ | tojson}})
+    bmi = JSON.parse({{ bmi_ | tojson}})
+    date = JSON.parse({{ date_ | tojson}})
+
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: date,
+            datasets: [{
+                label: 'Glucose',
+                data: glucose,
+                backgroundColor: [
+                    'rgb(0, 158, 251)',
+                    
+                ],
+                borderColor: [
+                'rgb(0, 158, 251)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                } 
+            }
+        }
+    });
+
+    const myChart1 = new Chart(ctx1, {
+      type: 'line',
+      data: {
+          labels: date,
+          datasets: [{
+              label: 'BMI',
+              data: bmi,
+              backgroundColor: [
+                  'rgb(0, 158, 251)',
+                  
+              ],
+              borderColor: [
+              'rgb(0, 158, 251)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        onResize: null,
+        scales: { yAxes: [{ ticks: { beginAtZero:true } }] } 
+        
+      }
+  });
+
+ 
+
+
+
+
+  function myGlucose() {
+    document.getElementById("chart1").style.display = "block";
+    document.getElementById("chart2").style.display = "none";
+  }
+
+  function myBMI() {
+    document.getElementById("chart1").style.display = "none";
+    document.getElementById("chart2").style.display = "block";
+  }
+
+
+
+
+
+    </script>
+
+
+
+{% endblock %}

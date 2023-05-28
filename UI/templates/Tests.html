@@ -1,0 +1,181 @@
+{% extends "Layout.html" %}
+{% block title %}Tests{% endblock %}
+{% block body %}
+
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-secondary rounded" data-toggle="modal" data-target="#newTestModal">Add Test</button>
+      
+
+
+
+      <!-- Modal-->
+        <div class="modal fade" id="newTestModal" tabindex="-1" role="dialog" aria-labelledby="newTestModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                    <h5 class="modal-title" id="newPatientModalLabel">Add new test</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+              </div>  
+              <div class="modal-body">
+
+                <form  action=" " method="POST">
+
+                    <div class="form-group row">
+                      <div class="col-md-4 d-flex justify-content-end">
+                        <label for="pregnancies">Pregnancies</label>
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="pregnancies" id="pregnancies" placeholder="Type here..." required="">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-4 d-flex justify-content-end">
+                        <label for="glucose">Glucose</label>
+                        <a href="#" tabindex="0" data-placement="top" role="button" class="popover-test" data-toggle="modal-popover" title="Glucose" data-content="Plasma glucose concentration a 2 hours in an oral glucose tolerance test">
+                           <i class="fas fa-thin fa-info-circle fa-fw"></i> 
+                        </a> 
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="glucose" id="glucose" placeholder="Type here..." required="">
+                      </div>
+                    </div>
+
+              
+                    <div class="form-group row">
+                      <div class="col-md-4 d-flex justify-content-end">
+                        <label for="bmi">BMI</label>
+                        <a href="#" tabindex="0" data-placement="top" role="button" class="popover-test" data-toggle="modal-popover" title="Body Mass Index" data-content="weight in kg / (height in m)^2"> 
+                          <i class="fas fa-thin fa-info-circle fa-fw"></i> 
+                        </a> 
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="bmi" id="bmi" placeholder="Type here..." required="">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-4 d-flex justify-content-end">
+                        <label for="age">Age</label>
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="age" id="age" placeholder="Type here..." required="">
+                      </div>
+                    </div>
+
+
+
+              </div>
+              <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-blue rounded">Save changes</button>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <br><br>
+
+<!-- TABLE -->        
+        <table class="table table-striped" class="table table-striped table-bordered dt-responsive nowrap" id="testsTable">
+            <thead>
+          
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Pregnancies</th>
+                <th scope="col">Glucose</th>
+                <th scope="col">BMI</th>
+                <th scope="col">Age</th>
+                <th scope="col" class="bg-blue">Diabetes Predicton</th>
+                <th scope="col">Action</th>
+              </tr>
+          
+            </thead>
+
+            <tbody>
+              {% for test in tests %}
+                <tr>
+                  <th>{{test.date}}</th>
+                  <td>{{test.pregnancies}}</td>
+                  <td>{{test.glucose}}</td>
+                  <td>{{test.bmi}}</td>
+                  <td>{{test.age}}</td>
+                  <td class="bg-blue">{{test.outcome}}</td> 
+                  <td> 
+                    <a title="send email" data-toggle="modal" data-target="#sendEmail{{test.test_id}}"> <i class="fas fa-envelope fa-fw text-color-black"></i></a>
+                    <a title="delete test" data-toggle="modal" data-target="#deleteModal{{test.test_id}}"> <i class="fas fa-trash-alt fa-fw text-color"></i></a>
+                  </td>
+                </tr>
+
+
+               <!-- delete model -->
+                <div class="modal fade" id="deleteModal{{test.test_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Test?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="{{ url_for('delete_test', test_id = test.test_id, patient_id = test.patient_id) }}" method="POST">
+                          <input class="btn btn-danger" type="submit" value="Delete">
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                 <!-- send email model -->
+                <div class="modal fade" id="sendEmail{{test.test_id}}" tabindex="-1" role="dialog" aria-labelledby="sendEmailModal" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="sendEmailModalLabel">Send Email?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="{{ url_for('send_email', test_id = test.test_id, patient_id = test.patient_id) }}" method="POST">
+                          <input class="btn btn-blue" type="submit" value="Send">
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <p> Note: The format of 'Diabetes Prediction' is <stong>1 (chance of diabetes)</strong> and <strong>0 (chance of diabetes)</strong>, where 0 is NO and 1 is YES. </p>
+
+
+
+   </div>
+  </div>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('[data-toggle="modal-popover"]').popover();   
+  });
+
+    $(document).ready(function () {
+      $.fn.dataTable.ext.classes.sPageButtonActive = 'btn btn-pagination'; // Change Pagination Button Class
+      $('#testsTable').DataTable({
+          pagingType: 'simple_numbers',
+          "lengthMenu": [ 5, 10, 25, 50, 75, 100 ],
+              //  $('td', row).css('background-color', '#ff8080');
+      });
+  });
+
+
+  </script>
+
+{% endblock %}

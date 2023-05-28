@@ -1,0 +1,260 @@
+{% extends "Layout.html" %}
+{% block title %}Patients{% endblock %}
+{% block body %}
+
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-secondary rounded" data-toggle="modal" data-target="#newPatientModal">Add patient</button>
+
+      <!-- Add new patient Modal-->
+        <div class="modal fade" id="newPatientModal" tabindex="-1" role="dialog" aria-labelledby="newPatientModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                    <h5 class="modal-title" id="newPatientModalLabel">Add new patient</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+              </div>  
+              <div class="modal-body">
+
+                <form  action=" " method="POST">
+<!--
+                    <div class="form-group row">
+                      <div class="col-md-4 d-flex justify-content-end">
+                        <label for="patientId">Patient ID</label>
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="patientid" id="patientId" placeholder="Patient ID" required="">
+                      </div>
+                    </div>
+-->
+
+                    <div class="form-group row">
+                      <div class="col-md-4 d-flex justify-content-end">
+                        <label for="firstName">First Name</label>
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="firstname" id="firstName" placeholder="First Name" required="">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-4 d-flex justify-content-end">
+                        <label for="lastName">Last Name</label>
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="lastname" id="lastName" placeholder="Last Name" required="">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-4 d-flex justify-content-end">
+                      <label for="sex">Sex</label>
+                    </div>
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" name="sex" id="sex" placeholder="Sex (M/F)" required="">
+                    </div>
+                    </div>
+  
+                      <div class="form-group row">
+                        <div class="col-md-4 d-flex justify-content-end">
+                          <label for="dateOfBirth">Date of Birth</label>
+                        </div>
+                        <div class="col-md-8">
+                          <input type="text" class="form-control" name="dateofbirth" id="dateOfBirth" placeholder="(yyyy/mm/dd)" required="">
+                        </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <div class="col-md-4 d-flex justify-content-end">
+                        <label for="homeAddress">Home Address</label>
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" class="form-control" name="homeaddress" id="homeAddress" placeholder="Home Address" required="">
+                      </div>
+                    </div>
+  
+                      <div class="form-group row">
+                        <div class="col-md-4 d-flex justify-content-end">
+                          <label for="email">Email</label>
+                        </div>
+                        <div class="col-md-8">
+                          <input type="email" class="form-control" name="email" id="email" placeholder="Email" required="">
+                        </div>
+                      </div>
+  
+                      <div class="form-group row">
+                        <div class="col-md-4 d-flex justify-content-end">
+                          <label for="phoneNumber">Phone Number</label>
+                        </div>
+                        <div class="col-md-8">
+                          <input type="numbers" class="form-control" name="phonenumber" id="phoneNumber" placeholder="Phone Number" required="">
+                        </div>
+                      </div>
+  
+
+
+              </div>
+              <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-blue rounded">Save changes</button>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <br><br>
+
+        <!-- PATIENTS TABLE -->
+
+        <table class="table table-striped" class="table table-striped table-bordered" id="patientsTable">
+            <thead>
+          
+              <tr>
+               <!--- <th scope="col">Patient ID</th> -->
+                <th scope="col">Last Name</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Action</th>
+              </tr>
+          
+            </thead>
+
+            <tbody>
+              {% for patient in patients %}
+                <tr>
+               <!---   <th>ID</th> -->
+                  <td>{{patient.last_name}}</td>
+                  <td>{{patient.first_name}}</td>
+                  <td> 
+                    <a title="patient info" data-toggle="modal" data-target="#infoPatientModal{{patient.patient_id}}"><i class="fas fa-solid fa-info fa-fw text-color-blue"></i></a>
+                    <a title="tests statistics" href="/dashboard/{{patient.patient_id}}"> <i class="fa fa-bar-chart"></i> </a>
+                    <a title="edit patient" href="/updatepatient/{{patient.patient_id}}"><i class="fa fa-edit text-color-black"></i></a>
+                    <a title="delete patient" data-toggle="modal" data-target="#deleteModal{{patient.patient_id}}"> <i class="fas fa-trash-alt fa-fw text-color"></i></a>
+                  </td>
+                </tr>
+
+               <!-- info patient modal -->
+              <div class="modal fade" id="infoPatientModal{{patient.patient_id}}" tabindex="-1" role="dialog" aria-labelledby="infoPatientModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                          <h5 class="modal-title" id="infoPatientModalLabel">Patient Data</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                    </div>  
+                    <div class="modal-body">
+      
+                      <form  action=" " method="POST">
+
+                        <div class="form-group row">
+                          <div class="col-md-4 d-flex justify-content-end">
+                            <label for="sex">Sex:</label>
+                          </div>
+                          <div class="col-md-8">
+                            <label>{{patient.sex}}</label>
+                          </div>
+                         <!--- <input type="text" class="form-control" name="sex" id="sex" placeholder="Sex (M/F)" required=""> -->
+                        </div>
+      
+                          <div class="form-group row">
+                            <div class="col-md-4 d-flex justify-content-end">
+                              <label for="dateOfBirth">Date of Birth:</label>
+                            </div>
+                            <div class="col-md-8">
+                              <label>{{patient.date_of_birth}}</label>
+                             <!-- <input type="text" class="form-control" name="dateofbirth" id="dateOfBirth" placeholder="Date of Birth (yyy/mm/dd)" required=""> -->
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-md-4 d-flex justify-content-end">
+                              <label for="homeAddress">Home Address:</label>
+                            </div>
+                            <div class="col-md-8">
+                              <label>{{patient.address}}</label>
+                             <!-- <input type="text" class="form-control" name="homeaddress" id="homeAddress" placeholder="Home Address" required=""> -->
+                            </div>
+                        </div>
+      
+                          <div class="form-group row">
+                            <div class="col-md-4 d-flex justify-content-end">
+                              <label for="email">Email:</label>
+                            </div>
+                            <div class="col-md-8">
+                              <label>{{patient.email}}</label>
+                            <!---  <input type="email" class="form-control" name="email" id="email" placeholder="Email" required=""> -->
+                            </div>
+                          </div>
+      
+                          <div class="form-group row">
+                            <div class="col-md-4 d-flex justify-content-end">
+                              <label for="phoneNumber">Phone Number:</label>
+                            </div>
+                            <div class="col-md-8">
+                              <label>{{patient.phone_number}}</label>
+                            <!---  <input type="numbers" class="form-control" name="phonenumber" id="phoneNumber" placeholder="Phone Number" required=""> -->
+                            </div>
+                          </div>
+      
+      
+                    </div>
+                    <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+                         <!--- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -->
+                          <!--<button type="button" class="btn  btn-secondary ">Send Email</button>-->
+                          <button type="button" class="btn btn-blue rounded" >
+                            <a href = "/tests/{{patient.patient_id}}">Add Tests</a>
+                            <span class="glyphicon glyphicon-ok"></span> 
+                          </button>
+                           
+                    </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+               <!-- delete model -->
+                <div class="modal fade" id="deleteModal{{patient.patient_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Patient?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="{{ url_for('delete_patient', patient_id=patient.patient_id) }}" method="POST">
+                          <input class="btn btn-danger" type="submit" value="Delete">
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </tbody>
+            </table>
+
+
+   </div>
+  </div>
+
+  <script type="text/javascript">
+
+    $(document).ready(function () {
+      $.fn.dataTable.ext.classes.sPageButtonActive = 'btn btn-pagination'; // Change Pagination Button Class
+      $('#patientsTable').DataTable({
+          pagingType: 'simple_numbers',
+          "lengthMenu": [ 5, 10, 25, 50, 75, 100 ],
+      });
+      table.buttons().container()
+        .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+      
+  });
+
+
+  </script>
+
+{% endblock %}
